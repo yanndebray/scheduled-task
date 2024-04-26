@@ -4,9 +4,7 @@ on:
   schedule:
     - cron: "*/5 * * * *"
   workflow_dispatch: {}
-  push:
-    paths:
-      - .github/workflows/task.yml
+
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
@@ -23,3 +21,12 @@ jobs:
         uses: matlab-actions/run-command@v2
         with:
           command: disp('Running my task!'); addpath('Tasks'); task1;
+
+      # Push back the result of the MATLAB task
+      - name: Commit and push changes
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add .  # This adds all changes in the repository to the staging area
+          git commit -m "Automated commit by GitHub Actions"  # Committing changes
+          git push origin main  # Pushing changes to the main branch
