@@ -29,4 +29,4 @@ jobs:
           git config --global user.name "GitHub Actions"
           git add .  # This adds all changes in the repository to the staging area
           git commit -m "Automated commit by GitHub Actions"  # Committing changes
-          git push origin main  # Pushing changes to the main branch
+          git push origin master  # Pushing changes to the main branch
