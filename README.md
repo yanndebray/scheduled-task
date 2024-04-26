@@ -1,5 +1,5 @@
 
-# Scheduled task **``**
+# Scheduled task 🕒
 
 This is a community version of scheduled task, a service from MathWorks aiming at scheduling data analysis, simulation and AI model training.
 
@@ -172,8 +172,4 @@ Save the result of the task by pushing back the changes. For this ensure that yo
 # Document your work
 ```matlab
 export("GettingStarted.mlx", "README.md");
-```
-
-```matlabTextOutput
-ans = '/MATLAB Drive/scheduled-task/README.md'
 ```
