@@ -1,9 +1,12 @@
-name: task
+name: MATLAB task
 run-name: ${{ github.actor }} is scheduling a MATLAB task
 on: 
   schedule:
     - cron: "*/5 * * * *"
-
+  workflow_dispatch: {}
+  push:
+    paths:
+      - .github/workflows/task.yml
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest

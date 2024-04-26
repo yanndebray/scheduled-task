@@ -1,5 +1,5 @@
 
-# Getting started
+# Scheduled task **``**
 
 This is a community version of scheduled task, a service from MathWorks aiming at scheduling data analysis, simulation and AI model training.
 
@@ -8,6 +8,7 @@ This is a community version of scheduled task, a service from MathWorks aiming a
 
 -  [Continuous Integration with MATLAB® and GitHub® Actions Workshop](https://github.com/mathworks/ci-with-matlab-and-github-actions-workshop) 
 -  [How to Run MATLAB in GitHub Actions \- Youtube](https://www.youtube.com/watch?v=Ndp5kBhOXq4)  
+-  [Using MATLAB with GitHub Actions \- Youtube](https://www.youtube.com/watch?v=Qj5upV0Qm1o)  
 -  [Learn GitHub Actions](https://docs.github.com/en/actions/learn-github-actions)  
 <a name="beginToc"></a>
 
@@ -17,6 +18,8 @@ This is a community version of scheduled task, a service from MathWorks aiming a
 [Create your first task](#create-your-first-task)
  
 [Schedule your task execution](#schedule-your-task-execution)
+ 
+[Document your work](#document-your-work)
  
 <a name="endToc"></a>
 
@@ -103,8 +106,8 @@ In the `.github/workflows/` directory, create a new file called `task.yml` and a
 edit .github/workflows/task.yml
 ```
 ```
-name: task
-run-name: ${{ github.actor }} is scheduling a MATLAB taskon:   schedule:    - cron: * * * * *
+name: MATLAB task
+run-name: ${{ github.actor }} is scheduling a MATLAB taskon:   schedule:    - cron: "*/5 * * * *"  workflow_dispatch: {}  push:    paths:      - .github/workflows/task.yml
 jobs:  check-bats-version:    runs-on: ubuntu-latest    steps:      # Checks-out your repository under $ GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       
@@ -119,7 +122,7 @@ jobs:  check-bats-version:    runs-on: ubuntu-latest    steps:      # Checks-out
           command: disp('Running my task!'); addpath('Tasks'); task1;
 ```
 
-This will run the [task1.m](./Tasks/task1.m) on a specific schedule, here [every minute](https://crontab.guru/every-1-minute)
+This will run the [task1.m](./Tasks/task1.m) on a specific [schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule), here [every 5 minutes](https://crontab.guru/every-5-minutes)
 
 
 This follows the cron syntax:
@@ -135,4 +138,19 @@ This follows the cron syntax:
 # │ │ │ │ │
 # * * * * * <command to execute>
 
+```
+
+We are also adding a [workflow\_dispatch](https://docs.github.com/en/actions/using-workflows/manually-running-a-workflow) to enable a manual execution of the workflow in the actions tab:
+
+
+![image_0.png](README_media/image_0.png)
+
+
+# Document your work
+```matlab
+export("GettingStarted.mlx", "README.md")
+```
+
+```matlabTextOutput
+ans = '/MATLAB Drive/scheduled-task/README.md'
 ```
