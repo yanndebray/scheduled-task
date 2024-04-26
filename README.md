@@ -10,6 +10,7 @@ This is a community version of scheduled task, a service from MathWorks aiming a
 -  [How to Run MATLAB in GitHub Actions \- Youtube](https://www.youtube.com/watch?v=Ndp5kBhOXq4)  
 -  [Using MATLAB with GitHub Actions \- Youtube](https://www.youtube.com/watch?v=Qj5upV0Qm1o)  
 -  [Learn GitHub Actions](https://docs.github.com/en/actions/learn-github-actions)  
+-  [Flat Data](https://githubnext.com/projects/flat-data)  
 <a name="beginToc"></a>
 
 ## Table of Contents:
@@ -107,7 +108,7 @@ edit .github/workflows/task.yml
 ```
 ```
 name: MATLAB task
-run-name: ${{ github.actor }} is scheduling a MATLAB taskon:   schedule:    - cron: "*/5 * * * *"  workflow_dispatch: {}  push:    paths:      - .github/workflows/task.yml
+run-name: ${{ github.actor }} is scheduling a MATLAB taskon:   schedule:    - cron: "*/5 * * * *"  workflow_dispatch: {}
 jobs:  check-bats-version:    runs-on: ubuntu-latest    steps:      # Checks-out your repository under $ GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       
@@ -120,6 +121,23 @@ jobs:  check-bats-version:    runs-on: ubuntu-latest    steps:      # Checks-out
         uses: matlab-actions/run-command@v2
         with:
           command: disp('Running my task!'); addpath('Tasks'); task1;
+
+      # Commit and push the result of the MATLAB task
+      - name: Commit and push changes
+        run: |
+          date > last-run.txt
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated"
+          git push
+
+      # Save the result as artifact
+      - name: Archive output data
+        uses: actions/upload-artifact@v4
+        with:
+          name: bitcoin-price-history
+          path: Data/btc.csv
 ```
 
 This will run the [task1.m](./Tasks/task1.m) on a specific [schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule), here [every 5 minutes](https://crontab.guru/every-5-minutes)
@@ -146,9 +164,14 @@ We are also adding a [workflow\_dispatch](https://docs.github.com/en/actions/usi
 ![image_0.png](README_media/image_0.png)
 
 
+Save the result of the task by pushing back the changes. For this ensure that you give Read and write permissions to the workflow in `Settings/Actions`
+
+
+![image_1.png](README_media/image_1.png)
+
 # Document your work
 ```matlab
-export("GettingStarted.mlx", "README.md")
+export("GettingStarted.mlx", "README.md");
 ```
 
 ```matlabTextOutput

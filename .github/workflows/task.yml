@@ -25,19 +25,12 @@ jobs:
       # Commit and push the result of the MATLAB task
       - name: Commit and push changes
         run: |
-          date > generated.txt
+          date > last-run.txt
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
           git commit -m "generated"
           git push
-
-     # # Push back the result of the MATLAB task        
-     #  - name: Push changes
-     #    uses: ad-m/github-push-action@master
-     #    with:
-     #      github_token: ${{ secrets.GITHUB_TOKEN }}
-     #      branch: ${{ github.ref }}
 
       # Save the result as artifact
       - name: Archive output data
