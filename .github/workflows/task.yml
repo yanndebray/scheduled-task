@@ -4,9 +4,7 @@ on:
   schedule:
     - cron: "*/5 * * * *"
   workflow_dispatch: {}
-  push:
-    paths:
-      - .github/workflows/task.yml
+
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
@@ -23,3 +21,27 @@ jobs:
         uses: matlab-actions/run-command@v2
         with:
           command: disp('Running my task!'); addpath('Tasks'); task1;
+
+      # Commit and push the result of the MATLAB task
+      - name: Commit and push changes
+        run: |
+          date > generated.txt
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated"
+          git push
+
+     # # Push back the result of the MATLAB task        
+     #  - name: Push changes
+     #    uses: ad-m/github-push-action@master
+     #    with:
+     #      github_token: ${{ secrets.GITHUB_TOKEN }}
+     #      branch: ${{ github.ref }}
+
+      # Save the result as artifact
+      - name: Archive output data
+        uses: actions/upload-artifact@v4
+        with:
+          name: bitcoin-price-history
+          path: Data/btc.csv
