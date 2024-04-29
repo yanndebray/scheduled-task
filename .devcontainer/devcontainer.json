@@ -1,0 +1,54 @@
+// For format details, see https://aka.ms/devcontainer.json. 
+{
+	"name": "MATLAB & Jupyter Codespace",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+		  "MATLAB_PRODUCT_LIST": "MATLAB Simulink Curve_Fitting_Toolbox Deep_Learning_Toolbox Image_Processing_Toolbox Statistics_and_Machine_Learning_Toolbox MATLAB_Compiler MATLAB_Compiler_SDK"
+		}
+	  },
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	// "image": "mcr.microsoft.com/devcontainers/base:bullseye",
+	"hostRequirements": {
+		"cpus": 4
+	},
+	"forwardPorts": [
+		8888
+	],
+	"waitFor": "onCreateCommand",
+	// "updateContentCommand": "python3 -m pip install -r requirements.txt",
+	// "postCreateCommand": "apt-get install -y git",
+	"updateContentCommand": "sed -i 's/.*c.NotebookApp.allow_origin_pat.*/import os; c.NotebookApp.allow_origin_pat = \".*\" + os.getenv(\"CODESPACE_NAME\") + \".*\"/g' ~/.jupyter/jupyter_notebook_config.py",
+	// "postStartCommand": "jupyter lab &",
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"version": "latest",
+			"enableNonRootDocker": "true",
+			"moby": "true"
+		},
+		"ghcr.io/devcontainers-contrib/features/ffmpeg-apt-get:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-toolsai.jupyter",
+				"MathWorks.language-matlab",
+				"ms-python.python",
+				"github.vscode-github-actions",
+				"github.copilot"
+			]
+		}
+	}
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "docker --version",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
