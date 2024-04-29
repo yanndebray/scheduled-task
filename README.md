@@ -108,8 +108,17 @@ edit .github/workflows/task.yml
 ```
 ```
 name: MATLAB task
-run-name: ${{ github.actor }} is scheduling a MATLAB taskon:   schedule:    - cron: "*/5 * * * *"  workflow_dispatch: {}
-jobs:  check-bats-version:    runs-on: ubuntu-latest    steps:      # Checks-out your repository under $ GITHUB_WORKSPACE, so your job can access it
+run-name: ${{ github.actor }} is scheduling a MATLAB task
+on: 
+  # schedule:
+  #   - cron: "*/5 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  task:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       
       # Sets up MATLAB on a GitHub-hosted runner

@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  check-bats-version:
+  task:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
