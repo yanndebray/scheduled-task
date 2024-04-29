@@ -1,0 +1,40 @@
+name: MATLAB task 1
+run-name: ${{ github.actor }} is scheduling a MATLAB task
+on: 
+  # schedule:
+  #   - cron: "*/5 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  task:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+      
+      # Sets up MATLAB on a GitHub-hosted runner
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v2
+
+      # You can use "run-command" to execute custom MATLAB scripts, functions, or statements
+      - name: Run custom testing procedure
+        uses: matlab-actions/run-command@v2
+        with:
+          command: disp('Running my task!'); addpath('Tasks'); task1;
+
+      # Commit and push the result of the MATLAB task
+      - name: Commit and push changes
+        run: |
+          date > last-run.txt
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated"
+          git push
+
+      # Save the result as artifact
+      - name: Archive output data
+        uses: actions/upload-artifact@v4
+        with:
+          name: bitcoin-price-history
+          path: Data/btc.csv
