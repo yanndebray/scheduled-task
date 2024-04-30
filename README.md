@@ -1,6 +1,8 @@
 
 # Scheduled task 🕒
 
+[![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=yanndebray/scheduled-task&project=task.prj&file=GettingStarted.mlx)
+
 This is a community version of scheduled task, a service from MathWorks aiming at scheduling data analysis, simulation and AI model training.
 
 <a name="beginToc"></a>
