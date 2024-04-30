@@ -3,43 +3,31 @@
 
 This is a community version of scheduled task, a service from MathWorks aiming at scheduling data analysis, simulation and AI model training.
 
-
-**Resources:**
-
--  [Continuous Integration with MATLAB® and GitHub® Actions Workshop](https://github.com/mathworks/ci-with-matlab-and-github-actions-workshop) 
--  [How to Run MATLAB in GitHub Actions \- Youtube](https://www.youtube.com/watch?v=Ndp5kBhOXq4)  
--  [Using MATLAB with GitHub Actions \- Youtube](https://www.youtube.com/watch?v=Qj5upV0Qm1o)  
--  [Learn GitHub Actions](https://docs.github.com/en/actions/learn-github-actions)  
--  [Flat Data](https://githubnext.com/projects/flat-data)  
 <a name="beginToc"></a>
 
 ## Table of Contents:
-[Architecture](#architecture)
- 
 [Create your first task](#create-your-first-task)
  
 [Schedule your task execution](#schedule-your-task-execution)
  
+[Automate live script execution overnight](#automate-live-script-execution-overnight)
+ 
 [Under the hood: Github Action implementation](#under-the-hood:-github-action-implementation)
+ 
+[Configuration required](#configuration-required)
  
 [Document your work](#document-your-work)
  
 <a name="endToc"></a>
 
-# Architecture
-
-In your repository, create the `.github/workflows/` directory to store your workflow files.
-
-```matlab
-mkdir .github/workflows/
-mkdir Tasks
-mkdir Data
-```
-
 # Create your first task
 
 The basic example will be checking [Bitcoin prices daily](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-prices), and storing it into a new row of an existing csv file.
 
+```matlab
+mkdir Tasks
+mkdir Data
+```
 
 **First iteration** of the task executed locally and interactively:
 
@@ -100,23 +88,53 @@ Save this calculation into a script to run daily:
 ```matlab
 edit Tasks/task1.m
 ```
+```
+% Read input data
+T = readtable("Data/btc.csv");
+jason = webread("https://api.coinbase.com/v2/prices/BTC-USD/spot");
+Tnew = struct2table(jason.data);
+Tnew.time = datetime("now");
+%  Transform data to fit the input format
+Tnew.amount = double(string(Tnew.amount));
+Tnew.base = cellstr(Tnew.base);
+Tnew.currency = cellstr(Tnew.currency);
+T = [T;Tnew]; % adding a row
+% Write output data
+writetable(T,'Data/btc.csv')
+```
 
 # Schedule your task execution
 ```matlab
 addpath("code/");
-filepath = 'Tasks/task3.m';
+filepath = 'Tasks/task1.m';
 schedule = "*/5 * * * *"; % every 5 minutes
-output = "Data/"; % optionally specify output to zip and save
-task = scheduleTask(filepath, schedule,output)
+% output = "Data/"; % optionally specify output to zip and save
+task = scheduleTask(filepath, schedule)
 ```
 
-```matlabTextOutput
-task = struct with fields:
-             Name: 'task3'
-    ExecutionTime: '*/5 * * * *'
-       OutputData: 'Data/'
-         TimeZone: 'local'
+# Automate live script execution overnight
 
+This task is going to generate a report in different formats (md, html, ipynb, docx, pdf).
+
+
+The results can be served up: 
+
+-  here as **HTML**: [https://yanndebray.github.io/scheduled\-task/Reports/task2](https://yanndebray.github.io/scheduled-task/Reports/task2)  
+-  or here as **pdf**: [https://yanndebray.github.io/scheduled\-task/Reports/task2.pdf](https://yanndebray.github.io/scheduled-task/Reports/task2.pdf)  
+
+Create the mlx file to execute:
+
+```matlab
+edit Tasks/task2.mlx
+```
+
+Schedule the execution:
+
+```matlab
+filepath = 'Tasks/task2.mlx';
+schedule = "0 0  * * *"; % every night at midnight
+output = "Reports/"; % optionally specify output to zip and save
+task = scheduleTask(filepath, schedule,output)
 ```
 
 # Under the hood: Github Action implementation
@@ -130,8 +148,8 @@ edit .github/workflows/task.yml
 name: MATLAB task
 run-name: ${{ github.actor }} is scheduling a MATLAB task
 on: 
-  # schedule:
-  #   - cron: "*/5 * * * *"
+  schedule:
+    - cron: "*/5 * * * *"
   workflow_dispatch: {}
 
 jobs:
@@ -192,8 +210,9 @@ We are also adding a [workflow\_dispatch](https://docs.github.com/en/actions/usi
 
 ![image_0.png](README_media/image_0.png)
 
+# Configuration required
 
-Save the result of the task by pushing back the changes. For this ensure that you give Read and write permissions to the workflow in `Settings/Actions`
+This implementation saves the result of the task by pushing back the changes. For this ensure that you give Read and write permissions to the workflow in `Settings/Actions`
 
 
 ![image_1.png](README_media/image_1.png)
@@ -202,3 +221,10 @@ Save the result of the task by pushing back the changes. For this ensure that yo
 ```matlab
 export("GettingStarted.mlx", "README.md");
 ```
+
+# **Resources**
+-  [Continuous Integration with MATLAB® and GitHub® Actions Workshop](https://github.com/mathworks/ci-with-matlab-and-github-actions-workshop) 
+-  [How to Run MATLAB in GitHub Actions \- Youtube](https://www.youtube.com/watch?v=Ndp5kBhOXq4)  
+-  [Using MATLAB with GitHub Actions \- Youtube](https://www.youtube.com/watch?v=Qj5upV0Qm1o)  
+-  [Learn GitHub Actions](https://docs.github.com/en/actions/learn-github-actions)  
+-  [Flat Data](https://githubnext.com/projects/flat-data)  

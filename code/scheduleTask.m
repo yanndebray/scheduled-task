@@ -45,14 +45,14 @@ function t = scheduleTask(filepath,schedule,outputdata)
 
     % MATLAB git functions
     % make sure to have a git client configured locally
-    g = gitrepo;
-    add(g,filepath);
-    add(g,".github/workflows/"+taskname+".yml");
-    commit(g,message="Add "+taskname);
+    % g = gitrepo;
+    % add(g,filepath);
+    % add(g,".github/workflows/"+taskname+".yml");
+    % commit(g,message="Add "+taskname);
     % push(g)
     % 
     % % Command line version
-    % !git add .
-    % !git commit -m "Add new task"
+    !git add .
+    !git commit -m "Add new task"
     !git push
 end
