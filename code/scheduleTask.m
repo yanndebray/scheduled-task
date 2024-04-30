@@ -42,4 +42,10 @@ function t = scheduleTask(filepath,schedule,outputdata)
     fileID = fopen(".github/workflows/"+taskname+".yml", 'w');
     fprintf(fileID, '%s', yaml_str);
     fclose(fileID);
+
+    g = gitrepo;
+    add(g,filepath);
+    add(g,".github/workflows/"+taskname+".yml");
+    commit(g,message="Add "+taskname);
+    push(g)
 end

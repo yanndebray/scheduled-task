@@ -1,0 +1,31 @@
+name: task4
+run-name: Scheduling a MATLAB task
+
+on: 
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  task:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+      
+      # Sets up MATLAB on a GitHub-hosted runner
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v2
+
+      # You can use "run-command" to execute custom MATLAB scripts, functions, or statements
+      - name: Run custom testing procedure
+        uses: matlab-actions/run-command@v2
+        with:
+          command: disp('Running my task!'); addpath('Tasks'); task4;
+          
+      # Save the result as artifact
+      - name: Archive output data
+        uses: actions/upload-artifact@v4
+        with:
+          name: task-output
+          path: Data/
