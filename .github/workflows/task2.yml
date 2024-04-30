@@ -1,8 +1,9 @@
-name: MATLAB task 2
-run-name: ${{ github.actor }} is scheduling a MATLAB task
+name: task2
+run-name: Scheduling a MATLAB task
+
 on: 
   schedule:
-    - cron: "0 0 * * *"
+    - cron: '0 0  * * *'
   workflow_dispatch: {}
 
 jobs:
@@ -16,17 +17,12 @@ jobs:
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v2
 
-      - name: Start display server (required for building doc in MATLAB)
-        run: |
-          Xvfb :99 & 
-          echo "DISPLAY=:99" >> $GITHUB_ENV
-
       # You can use "run-command" to execute custom MATLAB scripts, functions, or statements
       - name: Run custom testing procedure
         uses: matlab-actions/run-command@v2
         with:
           command: disp('Running my task!'); addpath('Tasks'); task2;
-
+      
       # Commit and push the result of the MATLAB task
       - name: Commit and push changes
         run: |
@@ -36,15 +32,10 @@ jobs:
           git add .
           git commit -m "generated"
           git push
-
+    
       # Save the result as artifact
       - name: Archive output data
         uses: actions/upload-artifact@v4
         with:
-          name: weather-data
-          path: Data/natick.csv
-      - name: Archive output data
-        uses: actions/upload-artifact@v4
-        with:
-          name: weather-report
+          name: task-output
           path: Reports/
