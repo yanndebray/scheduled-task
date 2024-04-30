@@ -1,14 +1,10 @@
-name: $task_name
+name: <task_name>
 run-name: Scheduling a MATLAB task
 
 on: 
   schedule:
     - cron: <task_schedule>
   workflow_dispatch: {}
-
-env:
-  task_name: <task_name>
-  task_output: <task_output>
 
 jobs:
   task:
@@ -25,11 +21,11 @@ jobs:
       - name: Run custom testing procedure
         uses: matlab-actions/run-command@v2
         with:
-          command: disp('Running my task!'); addpath('Tasks'); $task_name;
+          command: disp('Running my task!'); addpath('Tasks'); <task_name>;
           
       # Save the result as artifact
       - name: Archive output data
         uses: actions/upload-artifact@v4
         with:
           name: task-output
-          path: $task_output
+          path: <task_output>

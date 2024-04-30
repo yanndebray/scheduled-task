@@ -20,6 +20,8 @@ This is a community version of scheduled task, a service from MathWorks aiming a
  
 [Schedule your task execution](#schedule-your-task-execution)
  
+[Under the hood: Github Action implementation](#under-the-hood:-github-action-implementation)
+ 
 [Document your work](#document-your-work)
  
 <a name="endToc"></a>
@@ -100,6 +102,24 @@ edit Tasks/task1.m
 ```
 
 # Schedule your task execution
+```matlab
+addpath("code/");
+filepath = 'Tasks/task3.m';
+schedule = "*/5 * * * *"; % every 5 minutes
+output = "Data/"; % optionally specify output to zip and save
+task = scheduleTask(filepath, schedule,output)
+```
+
+```matlabTextOutput
+task = struct with fields:
+             Name: 'task3'
+    ExecutionTime: '*/5 * * * *'
+       OutputData: 'Data/'
+         TimeZone: 'local'
+
+```
+
+# Under the hood: Github Action implementation
 
 In the `.github/workflows/` directory, create a new file called `task.yml` and add the following code.
 
