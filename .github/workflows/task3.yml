@@ -3,12 +3,11 @@ run-name: Scheduling a MATLAB task
 
 on: 
   schedule:
-    - cron: $task_schedule
+    - cron: '*/5 * * * *'
   workflow_dispatch: {}
 
 env:
   task_name: task3
-  task_schedule: '*/5 * * * *'
   task_output: 
 
 jobs:
