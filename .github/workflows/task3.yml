@@ -2,8 +2,8 @@ name: task3
 run-name: Scheduling a MATLAB task
 
 on: 
-  schedule:
-    - cron: '*/5 * * * *'
+  # schedule:
+    # - cron: '*/5 * * * *'
   workflow_dispatch: {}
 
 jobs:
