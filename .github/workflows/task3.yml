@@ -22,10 +22,20 @@ jobs:
         uses: matlab-actions/run-command@v2
         with:
           command: disp('Running my task!'); addpath('Tasks'); task3;
-          
+      
+      # Commit and push the result of the MATLAB task
+      - name: Commit and push changes
+        run: |
+          date > last-run.txt
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated"
+          git push
+    
       # Save the result as artifact
       - name: Archive output data
         uses: actions/upload-artifact@v4
         with:
           name: task-output
-          path: Data/
+          path: 
