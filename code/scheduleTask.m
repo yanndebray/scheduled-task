@@ -36,6 +36,9 @@ function t = scheduleTask(filepath,schedule,outputdata)
     % Matlab version
     yaml_str = replace(yaml_str,"<task_name>",taskname);
     yaml_str = replace(yaml_str,"<task_schedule>","'"+schedule+"'");
+    if isempty(outputdata)
+        outputdata = "Data/";
+    end
     yaml_str = replace(yaml_str,"<task_output>",outputdata);
 
     % Write to file
